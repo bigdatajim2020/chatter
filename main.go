@@ -7,6 +7,7 @@ import (
 
 func main() {
 	fs := http.FileServer(http.Dir("assets/"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/err", errHandler)
@@ -20,6 +21,5 @@ func main() {
 	http.HandleFunc("/thread/post", postThreadHandler)
 	http.HandleFunc("/thread/read", readThreadHandler)
 
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
