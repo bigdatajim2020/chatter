@@ -29,5 +29,5 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		t = template.Must(template.ParseFiles(publicTempls...))
 	}
-	t.ExecuteTemplate(w, "layout", threads)
+	t.ExecuteTemplate(w, "Layout", threads)
 }
