@@ -13,12 +13,12 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	publicTempls := []string{
 		"templ/layout.html",
-		"templ/pubnavbar.html",
+		"templ/public.navbar.html",
 		"templ/index.html",
 	}
 	privateTempls := []string{
 		"templ/layout.html",
-		"templ/privnavbar.html",
+		"templ/private.navbar.html",
 		"templ/index.html",
 	}
 
