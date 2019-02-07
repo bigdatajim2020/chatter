@@ -2,7 +2,7 @@ package datastore
 
 import "time"
 
-// A User represents a registered user.
+// A User represents the forum user's information.
 type User struct {
 	ID        int
 	UUID      string
@@ -12,7 +12,7 @@ type User struct {
 	CreatedAt time.Time
 }
 
-// A Session represents an authenticated user session.
+// A Session represents a user's current login session.
 type Session struct {
 	ID        int
 	UUID      string // randomly generated unique ID as a cookie value.
