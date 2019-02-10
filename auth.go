@@ -1,19 +1,27 @@
 package main
 
-import "net/http"
+import (
+	"chatter/datastore"
+	"net/http"
+)
 
 // authenticate verifies user by email, then password, redirects to login page if credential incorrect.
 // TODO: improve authentication logic.
 func authenticate(w http.ResponseWriter, r *http.Request) {
-	user, err := data.UserByEmail(r.PostFormValue("email"))
+	user, err := datastore.UserByEmail(r.PostFormValue("email"))
 	if err != nil {
-		//
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
-	if user.Password == data.Encrypt(r.PostFormValue("password")) {
-		session := user.CreateSession()
+	if user.Password == datastore.Encrypt(r.PostFormValue("password")) {
+		session, err := user.CreateSession()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 		cookie := http.Cookie{
 			Name:     "_cookie",
-			Value:    session.Uuid,
+			Value:    session.UUID,
 			HttpOnly: true,
 		}
 		http.SetCookie(w, &cookie)
