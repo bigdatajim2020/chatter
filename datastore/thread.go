@@ -23,6 +23,29 @@ type Post struct {
 	CreatedAt time.Time
 }
 
+// NumReplies returns the number of posts in a therad.
+func (t *Thread) NumReplies() (count int, err error) {
+	q := `
+		select count(*)
+		from
+			posts
+		where
+			thread_id = $1
+	`
+	rows, err := Db.Query(q, t.ID)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	
+	for rows.Next() {
+		if err = rows.Scan(&count); err != nil {
+			return
+		}
+	}
+	return
+}
+
 // Threads extracts all threads in the database foe the index handler.
 func Threads() (threads []Thread, err error) {
 	q := `
