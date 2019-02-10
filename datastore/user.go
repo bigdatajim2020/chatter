@@ -21,6 +21,30 @@ type Session struct {
 	CreatedAt time.Time
 }
 
+// CreateSession creates a new session for an existing user.
+func (u *User) CreateSession() (s Session, err error) {
+	q := `
+		insert into
+			sessions (uuid, email, user_id, created_at)
+		values
+			($1, $2, $3, $4)
+		returning
+			id, uuid, email, user_id, created_at
+	`
+	stmt, err := Db.Prepare(q)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	uuid, err := createUUID()
+	if err != nil {
+		return
+	}
+	err = stmt.QueryRow(uuid, u.Email, u.ID, time.Now()).Scan(&s.CreatedAt, s.UUID, s.Email, s.UserID, s.CreatedAt)
+	return
+}
+
 // UserByEmail gets a single user by the given email.
 func UserByEmail(email string) (u User, err error) {
 	q := `
