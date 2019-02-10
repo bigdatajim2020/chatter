@@ -2,6 +2,8 @@ package main
 
 import "net/http"
 
+// authenticate verifies user by email, then password, redirects to login page if credential incorrect.
+// TODO: improve authentication logic.
 func authenticate(w http.ResponseWriter, r *http.Request) {
 	user, err := data.UserByEmail(r.PostFormValue("email"))
 	if err != nil {
