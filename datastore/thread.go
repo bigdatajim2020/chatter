@@ -37,7 +37,7 @@ func (t *Thread) NumReplies() (count int, err error) {
 		return
 	}
 	defer rows.Close()
-	
+
 	for rows.Next() {
 		if err = rows.Scan(&count); err != nil {
 			return
@@ -46,7 +46,7 @@ func (t *Thread) NumReplies() (count int, err error) {
 	return
 }
 
-// Threads extracts all threads in the database foe the index handler.
+// Threads extracts all threads in the database for the index handler.
 func Threads() (threads []Thread, err error) {
 	q := `
 	select
