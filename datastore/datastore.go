@@ -1,7 +1,9 @@
 package datastore
 
 import (
+	"crypto/sha1"
 	"database/sql"
+	"fmt"
 	"log"
 	"os"
 
@@ -24,4 +26,10 @@ func init() {
 	if err != nil {
 		log.Fatalf("Failed opening sql driver: %v", err)
 	}
+}
+
+// Encrypt hashes plain text with SHA-1
+func Encrypt(plaintext string) (cryptext string) {
+	cryptext = fmt.Sprintf("%x", sha1.Sum([]byte(plaintext)))
+	return
 }
