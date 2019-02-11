@@ -33,7 +33,7 @@ func signupAccountHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("create user: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	http.Redirect(w, r, "/login", http.StatusNotFound)
+	http.Redirect(w, r, "/login", http.StatusFound)
 }
 
 // authenticate verifies user by email, then password, redirects to login page if credential incorrect.
