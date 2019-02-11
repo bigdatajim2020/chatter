@@ -45,6 +45,26 @@ func (u *User) NewSession() (s Session, err error) {
 	return
 }
 
+// Check checks validation of every request with its cookies against a logged in user. It's used by session util.
+func (s *Session) Check() (valid bool, err error) {
+	q := `
+		select
+			id, uuid, email, user_id, created_at
+		from
+			sessions
+		where
+			uuid = $1
+	`
+	err = Db.QueryRow(q, s.UUID).Scan(&s.ID, &s.UUID, &s.Email, &s.UserID, &s.CreatedAt)
+	if err != nil {
+		return
+	}
+	if s.ID != 0 {
+		valid = true
+	}
+	return
+}
+
 // UserByEmail gets a single user by the given email when an existing user attempts to login. It is used in authenticate function.
 func UserByEmail(email string) (u User, err error) {
 	q := `
