@@ -36,7 +36,8 @@ func signupAccountHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/login", http.StatusFound)
 }
 
-// authenticate verifies user by email, then password, redirects to login page if credential incorrect.
+// authenticate handles user login form, POST: /authenticate.
+// It verifies user by email, then password, redirecting to login page if credential is incorrect.
 //
 // TODO: improve authentication logic.
 func authenticate(w http.ResponseWriter, r *http.Request) {
