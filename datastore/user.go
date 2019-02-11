@@ -21,8 +21,8 @@ type Session struct {
 	CreatedAt time.Time
 }
 
-// CreateSession creates a new session for an existing user.
-func (u *User) CreateSession() (s Session, err error) {
+// NewSession creates a new session for an existing user.
+func (u *User) NewSession() (s Session, err error) {
 	q := `
 		insert into
 			sessions (uuid, email, user_id, created_at)

@@ -14,7 +14,7 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if user.Password == datastore.Encrypt(r.PostFormValue("password")) {
-		session, err := user.CreateSession()
+		session, err := user.NewSession()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
