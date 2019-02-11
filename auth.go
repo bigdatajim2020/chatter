@@ -14,7 +14,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// signupHandler handles POST: /signup
+// signupHandler handles GET: /signup
 func signupHandler(w http.ResponseWriter, r *http.Request) {
 	renderHTML(w, nil, "login.layout", "public.navbar", "signup")
 }
