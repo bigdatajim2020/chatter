@@ -1,0 +1,31 @@
+{{ define "Content" }}
+<form
+  action="/authenticate"
+  method="post"
+  class="form-signin center"
+  role="form"
+>
+  <h2 class="form-signin-heading">
+    <i class="fa fa-comments-o">
+      Chatter
+    </i>
+  </h2>
+  <input
+    type="email"
+    name="email"
+    class="form-control"
+    placeholder="Email address"
+    required
+    autofocus
+  />
+  <input
+    type="password"
+    name="password"
+    class="form-control"
+    placeholder="Password"
+    required
+  />
+  <br />
+  <a href="/signup" class="lead pull-right">Sign up</a>
+</form>
+{{ end }}

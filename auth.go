@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	t := templates("login.layout", "public.navbar", "login")
+	err := t.Execute(w, nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
 // authenticate verifies user by email, then password, redirects to login page if credential incorrect.
 // TODO: improve authentication logic.
 func authenticate(w http.ResponseWriter, r *http.Request) {
