@@ -2,10 +2,11 @@ package main
 
 import (
 	"chatter/datastore"
+	"fmt"
 	"net/http"
 )
 
-// loginHandler handles GET: /login
+// loginHandler handles GET: /login, returns a login page.
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	t := templates("login.layout", "public.navbar", "login")
 	err := t.Execute(w, nil)
@@ -14,9 +15,25 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// signupHandler handles GET: /signup
+// signupHandler handles GET: /signup, returns a signup page.
 func signupHandler(w http.ResponseWriter, r *http.Request) {
 	renderHTML(w, nil, "login.layout", "public.navbar", "signup")
+}
+
+// signupAccountHandler handles POST: /signup, this creates an account.
+
+// TODO: improve signup logic.
+func signupAccountHandler(w http.ResponseWriter, r *http.Request) {
+	user := datastore.User{
+		Name:     r.FormValue("name"),
+		Email:    r.FormValue("email"),
+		Password: r.FormValue("password"),
+	}
+	if err := user.New(); err != nil {
+		fmt.Printf("create user: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	http.Redirect(w, r, "/login", http.StatusNotFound)
 }
 
 // authenticate verifies user by email, then password, redirects to login page if credential incorrect.

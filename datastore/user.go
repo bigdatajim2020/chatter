@@ -65,6 +65,29 @@ func (s *Session) Check() (valid bool, err error) {
 	return
 }
 
+// New creates a new user, save user info into database.
+func (u *User) New() (err error) {
+	q := `
+		insert into
+			users (uuid, name, email, password, created_at)
+		values ($1, $2, $3, $4, $5)
+		returning
+			id, uuid, created_at
+	`
+	stmt, err := Db.Prepare(q)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	uuid, err := createUUID()
+	if err != nil {
+		return
+	}
+	err = stmt.QueryRow(uuid, u.Name, u.Email, Encrypt(u.Password), time.Now()).Scan(&u.ID, &u.UUID, &u.CreatedAt)
+	return
+}
+
 // UserByEmail gets a single user by the given email when an existing user attempts to login. It is used in authenticate function.
 func UserByEmail(email string) (u User, err error) {
 	q := `
