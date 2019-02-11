@@ -5,6 +5,18 @@ import (
 	"net/http"
 )
 
+// errHandler handles GET: /err
+func errHandler(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	msg := q.Get("msg")
+	_, err := session(w, r)
+	if err != nil {
+		renderHTML(w, msg, "layout", "public.navbar", "index")
+	} else {
+		renderHTML(w, msg, "layout", "public.navbar", "index")
+	}
+}
+
 // indexHandler handles GET: /
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	threads, err := datastore.Threads()
