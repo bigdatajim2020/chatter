@@ -33,5 +33,8 @@ func renderHTML(w http.ResponseWriter, data interface{}, filenames ...string) {
 	}
 
 	t := template.Must(template.ParseFiles(files...))
-	t.ExecuteTemplate(w, "Layout", data)
+	err := t.ExecuteTemplate(w, "Layout", data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
