@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// indexHandler handles GET: /
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	threads, err := datastore.Threads()
 	if err != nil {
