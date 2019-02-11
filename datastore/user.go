@@ -45,7 +45,7 @@ func (u *User) NewSession() (s Session, err error) {
 	return
 }
 
-// UserByEmail gets a single user by the given email.
+// UserByEmail gets a single user by the given email when an existing user attempts to login. It is used in authenticate function.
 func UserByEmail(email string) (u User, err error) {
 	q := `
 		select
