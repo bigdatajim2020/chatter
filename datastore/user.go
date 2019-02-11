@@ -21,7 +21,7 @@ type Session struct {
 	CreatedAt time.Time
 }
 
-// NewSession creates a new session for an existing user.
+// NewSession creates a new session for an existing user when user login is authenticated.
 func (u *User) NewSession() (s Session, err error) {
 	q := `
 		insert into
