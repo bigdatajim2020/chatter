@@ -63,3 +63,16 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusFound)
 	}
 }
+
+// logoutHandler handles GET: /logout, it logs the user out.
+func logoutHandler(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("_cookie")
+	if err != http.ErrNoCookie {
+		s := datastore.Session{UUID: c.Value}
+		s.DeleteByUUID()
+		http.Redirect(w, r, "/", http.StatusFound)
+	} else {
+		// TODO: improve no cookie case.
+		http.Error(w, err.Error(), http.StatusExpectationFailed)
+	}
+}

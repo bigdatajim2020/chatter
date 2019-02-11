@@ -65,6 +65,24 @@ func (s *Session) Check() (valid bool, err error) {
 	return
 }
 
+// DeleteByUUID deletes session record from database when user logs out.
+func (s *Session) DeleteByUUID() (err error) {
+	q := `
+		delete from
+			sessions
+		where
+			uuid = $1
+	`
+	stmt, err := Db.Prepare(q)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(s.UUID)
+	return
+}
+
 // New creates a new user, save user info into database.
 func (u *User) New() (err error) {
 	q := `
