@@ -11,9 +11,9 @@ func errHandler(w http.ResponseWriter, r *http.Request) {
 	msg := q.Get("msg")
 	_, err := session(w, r)
 	if err != nil {
-		renderHTML(w, msg, "layout", "public.navbar", "index")
+		renderHTML(w, msg, "layout", "public.navbar", "error")
 	} else {
-		renderHTML(w, msg, "layout", "public.navbar", "index")
+		renderHTML(w, msg, "layout", "public.navbar", "error")
 	}
 }
 
