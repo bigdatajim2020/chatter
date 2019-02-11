@@ -5,12 +5,18 @@ import (
 	"net/http"
 )
 
+// loginHandler handles GET: /login
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	t := templates("login.layout", "public.navbar", "login")
 	err := t.Execute(w, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+// signupHandler handles POST: /signup
+func signupHandler(w http.ResponseWriter, r *http.Request) {
+	renderHTML(w, nil, "login.layout", "public.navbar", "signup")
 }
 
 // authenticate verifies user by email, then password, redirects to login page if credential incorrect.
