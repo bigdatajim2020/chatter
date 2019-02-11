@@ -12,9 +12,9 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		_, err = session(w, r)
 		if err != nil {
-			html(w, threads, "layout", "public.navbar", "index")
+			renderHTML(w, threads, "layout", "public.navbar", "index")
 		} else {
-			html(w, threads, "layout", "private.navbar", "index")
+			renderHTML(w, threads, "layout", "private.navbar", "index")
 		}
 	}
 }

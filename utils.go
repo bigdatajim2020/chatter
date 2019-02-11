@@ -26,7 +26,7 @@ func session(w http.ResponseWriter, r *http.Request) (s datastore.Session, err e
 	return
 }
 
-func html(w http.ResponseWriter, data interface{}, filenames ...string) {
+func renderHTML(w http.ResponseWriter, data interface{}, filenames ...string) {
 	var files []string
 	for _, f := range filenames {
 		files = append(files, fmt.Sprintf("templ/%s.html", f))
