@@ -40,7 +40,7 @@ func signupAccountHandler(w http.ResponseWriter, r *http.Request) {
 // It verifies user by email, then password, redirecting to login page if credential is incorrect.
 //
 // TODO: improve authentication logic.
-func authenticate(w http.ResponseWriter, r *http.Request) {
+func authenticateHandler(w http.ResponseWriter, r *http.Request) {
 	user, err := datastore.UserByEmail(r.PostFormValue("email"))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
