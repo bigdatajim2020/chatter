@@ -6,7 +6,14 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"net/url"
 )
+
+// errRedirect redirects users to a error page.
+func errRedirect(w http.ResponseWriter, r *http.Request, msg string) {
+	q := url.QueryEscape("msg=" + msg)
+	http.Redirect(w, r, "/err?"+q, http.StatusNotFound)
+}
 
 func session(w http.ResponseWriter, r *http.Request) (s datastore.Session, err error) {
 	cookie, err := r.Cookie("_cookie")
