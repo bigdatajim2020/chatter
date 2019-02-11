@@ -21,7 +21,7 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // signupAccountHandler handles POST: /signup, this creates an account.
-
+//
 // TODO: improve signup logic.
 func signupAccountHandler(w http.ResponseWriter, r *http.Request) {
 	user := datastore.User{
@@ -37,6 +37,7 @@ func signupAccountHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // authenticate verifies user by email, then password, redirects to login page if credential incorrect.
+//
 // TODO: improve authentication logic.
 func authenticate(w http.ResponseWriter, r *http.Request) {
 	user, err := datastore.UserByEmail(r.PostFormValue("email"))
