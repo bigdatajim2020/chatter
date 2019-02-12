@@ -15,6 +15,7 @@ func errRedirect(w http.ResponseWriter, r *http.Request, msg string) {
 	http.Redirect(w, r, "/err?"+q, http.StatusNotFound)
 }
 
+// session verifies cookies validation against all private html pages.
 func session(w http.ResponseWriter, r *http.Request) (s datastore.Session, err error) {
 	cookie, err := r.Cookie("_cookie")
 	if err != nil {
@@ -26,6 +27,7 @@ func session(w http.ResponseWriter, r *http.Request) (s datastore.Session, err e
 	return
 }
 
+// renderHTML parses necessary template files and renders a layout page to satisfy http handlers.
 func renderHTML(w http.ResponseWriter, data interface{}, filenames ...string) {
 	var files []string
 	for _, f := range filenames {
@@ -39,6 +41,8 @@ func renderHTML(w http.ResponseWriter, data interface{}, filenames ...string) {
 	}
 }
 
+// templates creates a layout template with other necessary templats.
+// It returns a prepared layout template.
 func templates(filenames ...string) (t *template.Template) {
 	var files []string
 	t = template.New("layout")
