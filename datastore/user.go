@@ -65,6 +65,42 @@ func (s *Session) Check() (valid bool, err error) {
 	return
 }
 
+// GetUser returns a User by session from database.
+func (s *Session) GetUser() (u User, err error) {
+	q := `
+		select
+			id, uuid, name, email, created_at
+		from
+			users
+		where
+			id = $1
+	`
+	err = Db.QueryRow(q, s.UserID).Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.CreatedAt)
+	return
+}
+
+// NewThread creates a new thread record with its topic in database.
+func (u *User) NewThread(topic string) (t Thread, err error) {
+	q := `
+		insert into
+			threads (uuid, topic, user_id, created_at)
+		values ($1, $2, $3, $4)
+		returning id, uuid, topic, user_id, created_at
+	`
+	stmt, err := Db.Prepare(q)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	uuid, err := createUUID()
+	if err != nil {
+		return
+	}
+	err = stmt.QueryRow(uuid, topic, u.ID, time.Now()).Scan(&t.ID, &t.UUID, &t.Topic, &t.UserID, &t.CreatedAt)
+	return
+}
+
 // DeleteByUUID deletes session record from database when user logs out.
 func (s *Session) DeleteByUUID() (err error) {
 	q := `
