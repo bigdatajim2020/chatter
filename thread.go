@@ -2,6 +2,7 @@ package main
 
 import (
 	"chatter/datastore"
+	"fmt"
 	"net/http"
 )
 
@@ -50,5 +51,30 @@ func readThreadHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			renderHTML(w, &thread, "layout", "private.navbar", "private.thread")
 		}
+	}
+}
+
+// postThreadHandler handles POST: /thread/post, it creates a post under a specific thread.
+func postThreadHandler(w http.ResponseWriter, r *http.Request) {
+	s, err := session(w, r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusFound)
+	} else {
+		u, err := s.GetUser()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		body, uuid := r.FormValue("body"), r.FormValue("uuid")
+		thread, err := datastore.ThreadByUUID(uuid)
+		if err != nil {
+			errRedirect(w, r, "Can't load thread")
+			return
+		}
+		if _, err := u.NewPost(thread, body); err != nil {
+			errRedirect(w, r, "Can't create post")
+			return
+		}
+		http.Redirect(w, r, fmt.Sprintf("/thread/read?id=%s", uuid), http.StatusFound)
 	}
 }

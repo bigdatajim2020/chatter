@@ -101,6 +101,28 @@ func (u *User) NewThread(topic string) (t Thread, err error) {
 	return
 }
 
+// NewPost creates a new post record under a specific thread.
+func (u *User) NewPost(t Thread, body string) (p Post, err error) {
+	q := `
+		insert into
+			posts (uuid, body, user_id, thread_id, created_at)
+		values ($1, $2, $3, $4, $5)
+		returning id, uuid, body, user_id, thread_id, created_at
+	`
+	stmt, err := Db.Prepare(q)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	uuid, err := createUUID()
+	if err != nil {
+		return
+	}
+	err = stmt.QueryRow(uuid, body, u.ID, t.ID, time.Now()).Scan(&p.ID, p.UUID, p.Body, p.UserID, p.ThreadID, p.CreatedAt)
+	return
+}
+
 // DeleteByUUID deletes session record from database when user logs out.
 func (s *Session) DeleteByUUID() (err error) {
 	q := `
