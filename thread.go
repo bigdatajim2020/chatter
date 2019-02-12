@@ -36,7 +36,7 @@ func createThreadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// readThreadHandler handles GET: /thread/read
+// readThreadHandler handles GET: /thread/read, it loads a specific thread by uuid.
 func readThreadHandler(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	uuid := q.Get("id")
