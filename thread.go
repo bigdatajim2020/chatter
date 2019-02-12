@@ -1,6 +1,7 @@
 package main
 
 import (
+	"chatter/datastore"
 	"net/http"
 )
 
@@ -32,5 +33,22 @@ func createThreadHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		http.Redirect(w, r, "/", http.StatusFound)
+	}
+}
+
+// readThreadHandler handles GET: /thread/read
+func readThreadHandler(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	uuid := q.Get("id")
+	thread, err := datastore.ThreadByUUID(uuid)
+	if err != nil {
+		errRedirect(w, r, "Can't load thread")
+	} else {
+		_, err := session(w, r)
+		if err != nil {
+			renderHTML(w, &thread, "layout", "public.navbar", "public.thread")
+		} else {
+			renderHTML(w, &thread, "layout", "private.navbar", "private.thread")
+		}
 	}
 }

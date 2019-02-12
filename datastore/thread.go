@@ -74,3 +74,17 @@ func Threads() (threads []Thread, err error) {
 	}
 	return
 }
+
+// ThreadByUUID gets a thread by its uuid.
+func ThreadByUUID(uuid string) (t Thread, err error) {
+	q := `
+		select
+			id, uuid, topic, user_id, created_at
+		from
+			threads
+		where
+		uuid = $1
+	`
+	err = Db.QueryRow(q, uuid).Scan(t.ID, t.UUID, t.Topic, t.UserID, t.CreatedAt)
+	return
+}
