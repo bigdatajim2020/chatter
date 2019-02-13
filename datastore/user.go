@@ -1,6 +1,10 @@
 package datastore
 
-import "time"
+import (
+	"database/sql"
+	"errors"
+	"time"
+)
 
 // A User represents the forum user's information.
 type User struct {
@@ -55,11 +59,13 @@ func (s *Session) Check() (valid bool, err error) {
 		where
 			uuid = $1
 	`
-	err = Db.QueryRow(q, s.UUID).Scan(&s.ID, &s.UUID, &s.Email, &s.UserID, &s.CreatedAt)
-	if err != nil {
+	err = Db.QueryRowContext(ctx, q, s.UUID).Scan(&s.ID, &s.UUID, &s.Email, &s.UserID, &s.CreatedAt)
+	switch {
+	case err == sql.ErrNoRows:
+		err = errors.New("session with this user not exist")
+	case err != nil:
 		return
-	}
-	if s.ID != 0 {
+	case s.ID != 0:
 		valid = true
 	}
 	return
