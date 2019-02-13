@@ -1,6 +1,7 @@
 package datastore
 
 import (
+	"log"
 	"time"
 )
 
@@ -24,6 +25,7 @@ type Post struct {
 }
 
 // NumReplies returns the number of posts in a therad.
+// It's used in index template as a pipline.
 func (t *Thread) NumReplies() (count int, err error) {
 	q := `
 		select count(*)
@@ -44,6 +46,30 @@ func (t *Thread) NumReplies() (count int, err error) {
 		}
 	}
 	return
+}
+
+// User returns the user by a thread.
+// It's used in index template as a pipline.
+func (t *Thread) User() (u User) {
+	q := `
+	select
+	id, uuid, name, email, created_at
+	from
+	users
+		where
+		id = $1
+	`
+	err := Db.QueryRow(q, t.UserID).Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.CreatedAt)
+	if err != nil {
+		log.Printf("query users by id: %v", err)
+	}
+	return
+}
+
+// CreatedAtDate formats the CreatedAt date to display nicely on the screen
+// It's used in index template as a pipline.
+func (t *Thread) CreatedAtDate() string {
+	return t.CreatedAt.Format("Jan 2, 2006 at 3:04pm")
 }
 
 // Threads extracts all threads in the database for the index handler.
