@@ -26,7 +26,7 @@ type Post struct {
 
 // NumReplies returns the number of posts in a therad.
 // It's used in index template as a pipline.
-func (t *Thread) NumReplies() (count int, err error) {
+func (t *Thread) NumReplies() (count int) {
 	q := `
 		select count(*)
 		from
@@ -36,14 +36,19 @@ func (t *Thread) NumReplies() (count int, err error) {
 	`
 	rows, err := Db.Query(q, t.ID)
 	if err != nil {
+		log.Printf("query posts by thread_id: %v", err)
 		return
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		if err = rows.Scan(&count); err != nil {
+			log.Printf("scan posts by thread_id: %v", err)
 			return
 		}
+	}
+	if err := rows.Err(); err != nil {
+		log.Printf("scan posts by thread_id: %v", err)
 	}
 	return
 }
@@ -121,6 +126,9 @@ func (t *Thread) Posts() (ps []Post) {
 			return
 		}
 		ps = append(ps, p)
+	}
+	if err := rows.Err(); err != nil {
+		log.Printf("scan posts by thread_id: %v", err)
 	}
 	return
 }
