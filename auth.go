@@ -8,16 +8,12 @@ import (
 
 // loginHandler handles GET: /login, returns a login page.
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	t := templates("login.layout", "public.navbar", "login")
-	err := t.Execute(w, nil)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	renderHTML(w, nil, "login.layout", "login")
 }
 
 // signupHandler handles GET: /signup, returns a signup page.
 func signupHandler(w http.ResponseWriter, r *http.Request) {
-	renderHTML(w, nil, "login.layout", "public.navbar", "signup")
+	renderHTML(w, nil, "login.layout", "signup")
 }
 
 // signupAccountHandler handles POST: /signup, this creates an account.
