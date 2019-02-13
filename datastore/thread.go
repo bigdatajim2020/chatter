@@ -25,7 +25,7 @@ type Post struct {
 }
 
 // NumReplies returns the number of posts in a therad.
-// It's used in index template as a pipline.
+// It's used in index template as a pipeline.
 func (t *Thread) NumReplies() (count int) {
 	q := `
 		select count(*)
@@ -54,7 +54,7 @@ func (t *Thread) NumReplies() (count int) {
 }
 
 // User returns the user by a thread.
-// It's used in index template as a pipline.
+// It's used in index template as a pipeline.
 func (t *Thread) User() (u User) {
 	q := `
 	select
@@ -72,7 +72,7 @@ func (t *Thread) User() (u User) {
 }
 
 // User returns the user by a thread.
-// It's used in thread templates as piplines.
+// It's used in thread templates as pipelines.
 func (p *Post) User() (u User) {
 	q := `
 	select
@@ -90,7 +90,7 @@ func (p *Post) User() (u User) {
 }
 
 // CreatedAtDate formats the CreatedAt date to display nicely on the screen
-// It's used in index template as a pipline.
+// It's used in index template as a pipeline.
 func (t *Thread) CreatedAtDate() string {
 	return t.CreatedAt.Format("Jan 2, 2006 at 3:04pm")
 }
@@ -102,7 +102,7 @@ func (p *Post) CreatedAtDate() string {
 }
 
 // Posts returns all posts belonging to a thread.
-// It's used in the thread templates as piplines.
+// It's used in the thread templates as pipelines.
 func (t *Thread) Posts() (ps []Post) {
 	q := `
 		select
