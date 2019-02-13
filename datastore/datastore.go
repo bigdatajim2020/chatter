@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
 
 	"github.com/joho/godotenv"
 
@@ -17,8 +18,12 @@ import (
 var Db *sql.DB
 
 func init() {
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Load env config
-	err := godotenv.Load("chatter/.env")
+	err = godotenv.Load(path.Join(wd, ".env"))
 	if err != nil {
 		log.Fatalf("Failed loading .env config: %v", err)
 	}
