@@ -16,13 +16,15 @@ func errRedirect(w http.ResponseWriter, r *http.Request, msg string) {
 }
 
 // session verifies cookies validation against all private html pages.
-func session(w http.ResponseWriter, r *http.Request) (s datastore.Session, err error) {
+func session(w http.ResponseWriter, r *http.Request) (s *datastore.Session, err error) {
 	cookie, err := r.Cookie("_cookie")
 	if err != nil {
-		s = datastore.Session{UUID: cookie.Value}
-		if ok, _ := s.Check(); !ok {
-			err = errors.New("Invalid session")
-		}
+		return
+	}
+
+	s = &datastore.Session{UUID: cookie.Value}
+	if ok, err := s.Check(); err != nil || !ok {
+		err = errors.New("Invalid session")
 	}
 	return
 }
