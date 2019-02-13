@@ -143,7 +143,7 @@ func Threads() (threads []Thread, err error) {
 	order by
 		created_at
 	desc`
-	rows, err := Db.Query(q)
+	rows, err := Db.QueryContext(ctx, q)
 	if err != nil {
 		return
 	}
