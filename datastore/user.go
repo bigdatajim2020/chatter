@@ -1,8 +1,10 @@
 package datastore
 
 import (
+	"chatter/logger"
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -180,6 +182,13 @@ func UserByEmail(email string) (u User, err error) {
 		where
 			email = $1
 	`
-	err = Db.QueryRow(q, email).Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.Password, &u.CreatedAt)
+	err = Db.QueryRowContext(ctx, q, email).Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.Password, &u.CreatedAt)
+	switch {
+	case err == sql.ErrNoRows:
+		logger.Warning.Printf("No user with email: %s", email)
+		err = fmt.Errorf("No user with email: %s", email)
+	case err != nil:
+		return
+	}
 	return
 }

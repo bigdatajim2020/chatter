@@ -2,6 +2,7 @@ package main
 
 import (
 	"chatter/datastore"
+	"chatter/logger"
 	"fmt"
 	"net/http"
 )
@@ -39,7 +40,8 @@ func signupAccountHandler(w http.ResponseWriter, r *http.Request) {
 func authenticateHandler(w http.ResponseWriter, r *http.Request) {
 	user, err := datastore.UserByEmail(r.PostFormValue("email"))
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		logger.Warning.Printf("error retrive user by email: %v", err)
+		errRedirect(w, r, err.Error())
 		return
 	}
 	if user.Password == datastore.Encrypt(r.PostFormValue("password")) {

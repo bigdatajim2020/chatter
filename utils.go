@@ -11,8 +11,8 @@ import (
 
 // errRedirect redirects users to a error page.
 func errRedirect(w http.ResponseWriter, r *http.Request, msg string) {
-	q := url.QueryEscape("msg=" + msg)
-	http.Redirect(w, r, "/err?"+q, http.StatusNotFound)
+	URL := fmt.Sprintf("/err?msg=%s", url.QueryEscape(msg))
+	http.Redirect(w, r, URL, http.StatusFound)
 }
 
 // session verifies cookies validation against all private html pages.
