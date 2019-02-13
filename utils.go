@@ -42,15 +42,3 @@ func renderHTML(w http.ResponseWriter, data interface{}, filenames ...string) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
-
-// templates creates a layout template with other necessary templats.
-// It returns a prepared layout template.
-func templates(filenames ...string) (t *template.Template) {
-	var files []string
-	t = template.New("layout")
-	for _, f := range filenames {
-		files = append(files, fmt.Sprintf("templ/%s.html", f))
-	}
-	t = template.Must(t.ParseFiles(files...))
-	return
-}
