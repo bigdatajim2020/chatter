@@ -1,6 +1,7 @@
 package datastore
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/sha1"
 	"database/sql"
@@ -14,8 +15,11 @@ import (
 	_ "github.com/lib/pq" //  postgreSQL initialization
 )
 
-// Db is a global variable.
-var Db *sql.DB
+var (
+	// Db is a global variable.
+	Db  *sql.DB
+	ctx = context.Background()
+)
 
 func init() {
 	wd, err := os.Getwd()
@@ -27,10 +31,16 @@ func init() {
 	if err != nil {
 		log.Fatalf("Failed loading .env config: %v", err)
 	}
-	dbname, sslmode := os.Getenv("dbname"), os.Getenv("sslmode")
-	Db, err = sql.Open("postgres", dbname+" "+sslmode)
+
+	user, password, dbname, sslmode := os.Getenv("user"), os.Getenv("password"), os.Getenv("dbname"), os.Getenv("sslmode")
+	Db, err = sql.Open("postgres", fmt.Sprintf("user=%s dbname=%s password=%s sslmode=%s", user, dbname, password, sslmode))
 	if err != nil {
 		log.Fatalf("Failed opening sql driver: %v", err)
+	}
+
+	// Verify database connection.
+	if err = Db.PingContext(ctx); err != nil {
+		log.Fatal(err)
 	}
 }
 
