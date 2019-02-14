@@ -4,13 +4,13 @@ Simple Chatter forum website written in Golang under instructions of [Go Web Pro
 
 ## Description
 
-![Threads image](https://github.com/williamzion/chatter/blob/master/assets/threads.png)
-
-![Posts image](https://github.com/williamzion/chatter/blob/master/assets/posts.png)
-
 Chatter forum is developed with pure Golang (which is not by any web frameworks or third party routers) and PostgreSQL as datestore.
 
 Users in Chatter can register forum, create threads conversation and post gossips under every thread.
+
+![Threads image](https://github.com/williamzion/chatter/blob/master/assets/threads.png)
+
+![Posts image](https://github.com/williamzion/chatter/blob/master/assets/posts.png)
 
 The tour of developing Chatter web application showed how powerful and simple Golang is as compared with other languages. Mostly because of the root of Golang language design and secondly its good and complete standard library packages.
 
