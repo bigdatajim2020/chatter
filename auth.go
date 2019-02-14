@@ -3,7 +3,6 @@ package main
 import (
 	"chatter/datastore"
 	"chatter/logger"
-	"fmt"
 	"net/http"
 )
 
@@ -26,8 +25,9 @@ func signupAccountHandler(w http.ResponseWriter, r *http.Request) {
 		Email:    r.FormValue("email"),
 		Password: r.FormValue("password"),
 	}
+	logger.Info.Printf("user: %#v\n", user)
 	if err := user.New(); err != nil {
-		fmt.Printf("create user: %v", err)
+		logger.Error.Printf("create user: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	http.Redirect(w, r, "/login", http.StatusFound)

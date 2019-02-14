@@ -158,7 +158,7 @@ func (u *User) New() (err error) {
 		returning
 			id, uuid, created_at
 	`
-	stmt, err := Db.Prepare(q)
+	stmt, err := Db.PrepareContext(ctx, q)
 	if err != nil {
 		return
 	}
