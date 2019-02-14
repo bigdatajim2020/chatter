@@ -172,6 +172,6 @@ func ThreadByUUID(uuid string) (t Thread, err error) {
 		where
 		uuid = $1
 	`
-	err = Db.QueryRow(q, uuid).Scan(t.ID, t.UUID, t.Topic, t.UserID, t.CreatedAt)
+	err = Db.QueryRowContext(ctx, q, uuid).Scan(&t.ID, &t.UUID, &t.Topic, &t.UserID, &t.CreatedAt)
 	return
 }
