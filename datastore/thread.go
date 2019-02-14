@@ -1,6 +1,7 @@
 package datastore
 
 import (
+	"chatter/logger"
 	"log"
 	"time"
 )
@@ -36,19 +37,19 @@ func (t *Thread) NumReplies() (count int) {
 	`
 	rows, err := Db.QueryContext(ctx, q, t.ID)
 	if err != nil {
-		log.Printf("query posts by thread_id: %v", err)
+		logger.Error.Printf("query posts by thread_id: %v", err)
 		return
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		if err = rows.Scan(&count); err != nil {
-			log.Printf("scan posts by thread_id: %v", err)
+			logger.Error.Printf("scan posts by thread_id: %v", err)
 			return
 		}
 	}
-	if err := rows.Err(); err != nil {
-		log.Printf("scan posts by thread_id: %v", err)
+	if err = rows.Err(); err != nil {
+		logger.Error.Printf("scan posts by thread_id: %v", err)
 	}
 	return
 }
