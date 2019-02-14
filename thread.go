@@ -46,6 +46,7 @@ func readThreadHandler(w http.ResponseWriter, r *http.Request) {
 	uuid := q.Get("id")
 	thread, err := datastore.ThreadByUUID(uuid)
 	if err != nil {
+		logger.Error.Printf("load thread by uuid: %v", err)
 		errRedirect(w, r, "Can't load thread")
 	} else {
 		_, err := session(w, r)
