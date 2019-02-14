@@ -34,7 +34,7 @@ func (t *Thread) NumReplies() (count int) {
 		where
 			thread_id = $1
 	`
-	rows, err := Db.Query(q, t.ID)
+	rows, err := Db.QueryContext(ctx, q, t.ID)
 	if err != nil {
 		log.Printf("query posts by thread_id: %v", err)
 		return
@@ -64,7 +64,7 @@ func (t *Thread) User() (u User) {
 	where
 		id = $1
 	`
-	err := Db.QueryRow(q, t.UserID).Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.CreatedAt)
+	err := Db.QueryRowContext(ctx, q, t.UserID).Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.CreatedAt)
 	if err != nil {
 		log.Printf("query users by id: %v", err)
 	}
@@ -82,7 +82,7 @@ func (p *Post) User() (u User) {
 	where
 		id = $1
 	`
-	err := Db.QueryRow(q, p.UserID).Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.CreatedAt)
+	err := Db.QueryRowContext(ctx, q, p.UserID).Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.CreatedAt)
 	if err != nil {
 		log.Printf("query users by id: %v", err)
 	}
@@ -112,7 +112,7 @@ func (t *Thread) Posts() (ps []Post) {
 		where
 			thread_id = $1
 	`
-	rows, err := Db.Query(q, t.ID)
+	rows, err := Db.QueryContext(ctx, q, t.ID)
 	if err != nil {
 		log.Printf("query posts by thread_id: %v", err)
 		return
