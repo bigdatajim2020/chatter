@@ -1,8 +1,9 @@
 package main
 
 import (
-	"chatter/datastore"
 	"net/http"
+
+	"github.com/williamzion/chatter/datastore"
 )
 
 // errHandler handles GET: /err
@@ -24,7 +25,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		errRedirect(w, r, "Cannot get threads")
 		return
 	}
-	
+
 	_, err = session(w, r)
 	if err != nil {
 		renderHTML(w, threads, "layout", "public.navbar", "index")

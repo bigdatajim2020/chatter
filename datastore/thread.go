@@ -1,9 +1,10 @@
 package datastore
 
 import (
-	"chatter/logger"
 	"log"
 	"time"
+
+	"github.com/williamzion/chatter/logger"
 )
 
 // A Thread represents a forum thread (a conversation among forum users).

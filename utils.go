@@ -1,12 +1,13 @@
 package main
 
 import (
-	"chatter/datastore"
 	"errors"
 	"fmt"
 	"html/template"
 	"net/http"
 	"net/url"
+
+	"github.com/williamzion/chatter/datastore"
 )
 
 // errRedirect redirects users to a error page.

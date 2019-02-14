@@ -1,9 +1,10 @@
 package main
 
 import (
-	"chatter/datastore"
-	"chatter/logger"
 	"net/http"
+
+	"github.com/williamzion/chatter/datastore"
+	"github.com/williamzion/chatter/logger"
 )
 
 // loginHandler handles GET: /login, returns a login page.

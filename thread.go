@@ -1,10 +1,11 @@
 package main
 
 import (
-	"chatter/datastore"
-	"chatter/logger"
 	"fmt"
 	"net/http"
+
+	"github.com/williamzion/chatter/datastore"
+	"github.com/williamzion/chatter/logger"
 )
 
 // newThreadHandler handles GET: /thread/new, it shows users an entry form to create a new thread with topic.

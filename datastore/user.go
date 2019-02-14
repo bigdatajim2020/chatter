@@ -1,11 +1,12 @@
 package datastore
 
 import (
-	"chatter/logger"
 	"database/sql"
 	"errors"
 	"fmt"
 	"time"
+
+	"github.com/williamzion/chatter/logger"
 )
 
 // A User represents the forum user's information.
