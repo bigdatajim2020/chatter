@@ -52,8 +52,10 @@ func authenticateHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		cookie := http.Cookie{
 			Name:     "_cookie",
+			Path:     "/",
 			Value:    session.UUID,
 			HttpOnly: true,
+			MaxAge:   7 * 24 * 60 * 60,
 		}
 		http.SetCookie(w, &cookie)
 		http.Redirect(w, r, "/", http.StatusFound)
