@@ -47,7 +47,7 @@ func (u *User) NewSession() (s Session, err error) {
 	if err != nil {
 		return
 	}
-	err = stmt.QueryRow(uuid, u.Email, u.ID, time.Now()).Scan(&s.ID, s.UUID, s.Email, s.UserID, s.CreatedAt)
+	err = stmt.QueryRow(uuid, u.Email, u.ID, time.Now()).Scan(&s.ID, &s.UUID, &s.Email, &s.UserID, &s.CreatedAt)
 	return
 }
 
