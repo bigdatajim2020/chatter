@@ -37,7 +37,7 @@ func (u *User) NewSession() (s Session, err error) {
 		returning
 			id, uuid, email, user_id, created_at
 	`
-	stmt, err := Db.Prepare(q)
+	stmt, err := Db.PrepareContext(ctx, q)
 	if err != nil {
 		return
 	}
@@ -47,7 +47,7 @@ func (u *User) NewSession() (s Session, err error) {
 	if err != nil {
 		return
 	}
-	err = stmt.QueryRow(uuid, u.Email, u.ID, time.Now()).Scan(&s.CreatedAt, s.UUID, s.Email, s.UserID, s.CreatedAt)
+	err = stmt.QueryRow(uuid, u.Email, u.ID, time.Now()).Scan(&s.ID, s.UUID, s.Email, s.UserID, s.CreatedAt)
 	return
 }
 
