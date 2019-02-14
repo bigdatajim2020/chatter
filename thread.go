@@ -66,12 +66,14 @@ func postThreadHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		u, err := s.GetUser()
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			logger.Error.Printf("get user by session: %v", err)
+			http.Error(w, "Get user error, please try again", http.StatusInternalServerError)
 			return
 		}
 		body, uuid := r.FormValue("body"), r.FormValue("uuid")
 		thread, err := datastore.ThreadByUUID(uuid)
 		if err != nil {
+			logger.Error.Printf("load thread by uuid: %v", err)
 			errRedirect(w, r, "Can't load thread")
 			return
 		}

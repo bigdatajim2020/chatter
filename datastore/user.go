@@ -117,7 +117,7 @@ func (u *User) NewPost(t Thread, body string) (p Post, err error) {
 		values ($1, $2, $3, $4, $5)
 		returning id, uuid, body, user_id, thread_id, created_at
 	`
-	stmt, err := Db.Prepare(q)
+	stmt, err := Db.PrepareContext(ctx, q)
 	if err != nil {
 		return
 	}
@@ -127,7 +127,7 @@ func (u *User) NewPost(t Thread, body string) (p Post, err error) {
 	if err != nil {
 		return
 	}
-	err = stmt.QueryRow(uuid, body, u.ID, t.ID, time.Now()).Scan(&p.ID, p.UUID, p.Body, p.UserID, p.ThreadID, p.CreatedAt)
+	err = stmt.QueryRowContext(ctx, uuid, body, u.ID, t.ID, time.Now()).Scan(&p.ID, &p.UUID, &p.Body, &p.UserID, &p.ThreadID, &p.CreatedAt)
 	return
 }
 
