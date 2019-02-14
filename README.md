@@ -14,18 +14,22 @@ Users in Chatter can register forum, create threads conversation and post gossip
 
 The tour of developing Chatter web application showed how powerful and simple Golang is as compared with other languages. Mostly because of the root of Golang language design and secondly its good and complete standard library packages.
 
-## Installation And Usage
+## Installation
 
-Clone this git repository under your `GOPATH/src` directory:
+To install Chatter, run the following:
 
 ```bash
-git clone git@github.com:williamzion/chatter.git
+go get -u github.com/williamzion/chatter
 ```
+
+## Usage
+
+You may better use chatter root as working directory.
 
 Create a `.env` file under chatter root directory:
 
 ```bash
->$ cd chatter
+>$ cd ~/go/src/github.com/williamzion/chatter
 >$ touch .env
 ```
 
@@ -38,13 +42,13 @@ dbname=
 sslmode=disable
 ```
 
-Then you will need to setup your database tables for this application with file in `chatter/datastore/setup.sql`.
+Then you will need to bootstrap your database tables for this application with file in `chatter/datastore/setup.sql`.
 
 Finally, build and run:
 
 ```bash
->$ go install
->$ chatter
+>$ go build
+>$ ./chatter
 ```
 
 ## Credits
