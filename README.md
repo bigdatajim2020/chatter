@@ -29,7 +29,7 @@ Create a `.env` file under chatter root directory:
 >$ touch .env
 ```
 
-Type your Postgres credentials as following:
+Type your Postgres credentials as following format:
 
 ```txt
 user=
