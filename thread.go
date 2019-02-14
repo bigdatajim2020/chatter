@@ -78,6 +78,7 @@ func postThreadHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if _, err := u.NewPost(thread, body); err != nil {
+			logger.Error.Printf("create thread post: %v", err)
 			errRedirect(w, r, "Can't create post")
 			return
 		}
