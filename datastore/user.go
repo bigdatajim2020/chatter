@@ -83,7 +83,7 @@ func (s *Session) GetUser() (u User, err error) {
 		where
 			id = $1
 	`
-	err = Db.QueryRow(q, s.UserID).Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.CreatedAt)
+	err = Db.QueryRowContext(ctx, q, s.UserID).Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.CreatedAt)
 	return
 }
 
@@ -95,7 +95,7 @@ func (u *User) NewThread(topic string) (t Thread, err error) {
 		values ($1, $2, $3, $4)
 		returning id, uuid, topic, user_id, created_at
 	`
-	stmt, err := Db.Prepare(q)
+	stmt, err := Db.PrepareContext(ctx, q)
 	if err != nil {
 		return
 	}
@@ -105,7 +105,7 @@ func (u *User) NewThread(topic string) (t Thread, err error) {
 	if err != nil {
 		return
 	}
-	err = stmt.QueryRow(uuid, topic, u.ID, time.Now()).Scan(&t.ID, &t.UUID, &t.Topic, &t.UserID, &t.CreatedAt)
+	err = stmt.QueryRowContext(ctx, uuid, topic, u.ID, time.Now()).Scan(&t.ID, &t.UUID, &t.Topic, &t.UserID, &t.CreatedAt)
 	return
 }
 

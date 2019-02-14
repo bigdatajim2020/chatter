@@ -2,6 +2,7 @@ package main
 
 import (
 	"chatter/datastore"
+	"chatter/logger"
 	"fmt"
 	"net/http"
 )
@@ -24,13 +25,15 @@ func createThreadHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		u, err := s.GetUser()
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			logger.Error.Printf("get user by session: %v", err)
+			http.Error(w, "Get user error, please try again", http.StatusInternalServerError)
 			return
 		}
 
 		topic := r.FormValue("topic")
 		if _, err := u.NewThread(topic); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			logger.Error.Printf("create new thread: %v", err)
+			http.Error(w, "Create new thread error, please try again", http.StatusInternalServerError)
 			return
 		}
 		http.Redirect(w, r, "/", http.StatusFound)
