@@ -139,13 +139,13 @@ func (s *Session) DeleteByUUID() (err error) {
 		where
 			uuid = $1
 	`
-	stmt, err := Db.Prepare(q)
+	stmt, err := Db.PrepareContext(ctx, q)
 	if err != nil {
 		return
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(s.UUID)
+	_, err = stmt.ExecContext(ctx, s.UUID)
 	return
 }
 

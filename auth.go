@@ -68,11 +68,15 @@ func authenticateHandler(w http.ResponseWriter, r *http.Request) {
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	c, err := r.Cookie("_cookie")
 	if err != http.ErrNoCookie {
+		// Delete user session from database immediately.
 		s := datastore.Session{UUID: c.Value}
 		s.DeleteByUUID()
+		// Delete user cookie from browser immediately.
+		c.MaxAge = -1
+		http.SetCookie(w, c)
 		http.Redirect(w, r, "/", http.StatusFound)
 	} else {
-		// TODO: improve no cookie case.
-		http.Error(w, err.Error(), http.StatusExpectationFailed)
+		// TODO: improve no cookie case which users empty cookies manually themselves. As with such case, database should trigger cookies expire lifetime.
+		errRedirect(w, r, err.Error())
 	}
 }
