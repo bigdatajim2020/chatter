@@ -43,8 +43,8 @@ Then you will need to setup your database tables for this application with file 
 Finally, build and run:
 
 ```bash
->$ go build
->$ ./chatter
+>$ go install
+>$ chatter
 ```
 
 ## Credits
