@@ -37,8 +37,8 @@ Type your Postgres credentials as following format:
 
 ```txt
 user=
-password=
-dbname=
+password=_database-user_
+dbname=_database-name_
 sslmode=disable
 ```
 
