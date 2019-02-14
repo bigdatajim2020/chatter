@@ -192,3 +192,90 @@ func UserByEmail(email string) (u User, err error) {
 	}
 	return
 }
+
+// UserByUUID returns a user with specific uuid.
+func UserByUUID(uuid string) (u User, err error) {
+	q := `
+		select
+			id, uuid, name, email, password, created_at
+		from
+			users
+		where
+			uuid = $1
+	`
+	err = Db.QueryRowContext(ctx, q, uuid).Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.Password, &u.CreatedAt)
+	switch {
+	case err == sql.ErrNoRows:
+		logger.Warning.Printf("No user with uuid: %s", uuid)
+		err = fmt.Errorf("No user with uuid: %s", uuid)
+	case err != nil:
+		return
+	}
+	return
+}
+
+// Session returns the session for an existing user.
+func (u *User) Session() (s Session, err error) {
+	q := `
+		select
+			id, uuid, email, user_id, created_at
+		from
+			sessions
+		where
+			user_id = $1
+	`
+	err = Db.QueryRowContext(ctx, q, u.ID).Scan(&s.ID, &s.UUID, &s.Email, &s.UserID, &s.CreatedAt)
+	return
+}
+
+// Users returns all users in the database.
+func Users() (users []User, err error) {
+	q := `
+		select
+			id, uuid, name, email, password, created_at
+		from
+			users
+	`
+	rows, err := Db.QueryContext(ctx, q)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var u User
+		if err = rows.Scan(&u.ID, &u.UUID, &u.Name, &u.Email, &u.Password, &u.CreatedAt); err != nil {
+			return
+		}
+		users = append(users, u)
+	}
+	if err = rows.Err(); err != nil {
+		logger.Error.Printf("scan users: %v\n", err)
+	}
+	return
+}
+
+// Delete deletes a user from database.
+func (u *User) Delete() (err error) {
+	q := "delete from users where id = $1"
+	stmt, err := Db.PrepareContext(ctx, q)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	_, err = stmt.ExecContext(ctx, u.ID)
+	return
+}
+
+// Update updates a user information in the database.
+func (u *User) Update() (err error) {
+	q := "update users set name = $2, email = $3 where id = $1"
+	stmt, err := Db.PrepareContext(ctx, q)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	_, err = stmt.ExecContext(ctx, u.ID, u.Name, u.Email)
+	return
+}
