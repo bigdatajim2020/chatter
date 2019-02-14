@@ -13,3 +13,13 @@ var users = []User{
 		Password: "john_pass",
 	},
 }
+
+func teardown() (err error) {
+	for _, t := range []string{"sessions", "posts", "threads", "users"} {
+		err = DeleteAll(t)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
