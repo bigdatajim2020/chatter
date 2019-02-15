@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path"
 
-	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
+	"github.com/williamzion/chatter/logger"
 
 	_ "github.com/lib/pq" //  postgreSQL initialization
 )
@@ -22,17 +22,15 @@ var (
 )
 
 func init() {
-	wd, err := os.Getwd()
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".") // default path is current working directory
+	err := viper.ReadInConfig()
+	logger.Info.Println(os.Getwd())
 	if err != nil {
-		log.Fatal(err)
-	}
-	// Load env config
-	err = godotenv.Load(path.Join(wd, ".env"))
-	if err != nil {
-		log.Fatalf("Failed loading .env config: %v", err)
+		log.Fatalf("Failed loading config file: %v", err)
 	}
 
-	user, password, dbname, sslmode := os.Getenv("user"), os.Getenv("password"), os.Getenv("dbname"), os.Getenv("sslmode")
+	user, password, dbname, sslmode := viper.GetString("user"), viper.GetString("password"), viper.GetString("dbname"), viper.GetString("sslmode")
 	Db, err = sql.Open("postgres", fmt.Sprintf("user=%s dbname=%s password=%s sslmode=%s", user, dbname, password, sslmode))
 	if err != nil {
 		log.Fatalf("Failed opening sql driver: %v", err)
