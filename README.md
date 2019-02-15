@@ -36,7 +36,7 @@ Create a `config.yaml` file under chatter root directory which is the current wo
 Type your Postgres credentials as following format:
 
 ```txt
-user: _db-user
+user: _db-user_
 password: _db-password_
 dbname: _db-name_
 sslmode: disable
