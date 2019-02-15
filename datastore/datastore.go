@@ -30,7 +30,7 @@ func init() {
 		log.Fatalf("Failed loading config file: %v", err)
 	}
 
-	user, password, dbname, sslmode := viper.GetString("user"), viper.GetString("password"), viper.GetString("dbname"), viper.GetString("sslmode")
+	user, password, dbname, sslmode := viper.GetString("user"), viper.Get("password"), viper.Get("dbname"), viper.Get("sslmode")
 	Db, err = sql.Open("postgres", fmt.Sprintf("user=%s dbname=%s password=%s sslmode=%s", user, dbname, password, sslmode))
 	if err != nil {
 		log.Fatalf("Failed opening sql driver: %v", err)
