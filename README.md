@@ -26,20 +26,20 @@ go get -u github.com/williamzion/chatter
 
 You may better use chatter root as working directory.
 
-Create a `.env` file under chatter root directory:
+Create a `config.yaml` file under chatter root directory which is the current working directory:
 
 ```bash
 >$ cd ~/go/src/github.com/williamzion/chatter
->$ touch .env
+>$ touch config.yaml
 ```
 
 Type your Postgres credentials as following format:
 
 ```txt
-user=
-password=_database-user_
-dbname=_database-name_
-sslmode=disable
+user: _db-user
+password: _db-password_
+dbname: _db-name_
+sslmode: disable
 ```
 
 Then you will need to bootstrap your database tables for this application with file in `chatter/datastore/setup.sql`.
