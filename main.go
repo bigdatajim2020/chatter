@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 )
 
 func main() {
@@ -21,5 +24,17 @@ func main() {
 	http.HandleFunc("/thread/post", postThreadHandler)
 	http.HandleFunc("/thread/read", readThreadHandler)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	errChan := make(chan error)
+
+	go func() {
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, os.Interrupt, os.Kill)
+		errChan <- fmt.Errorf("%s", <-c)
+	}()
+
+	go func() {
+		errChan <- http.ListenAndServe(":8080", nil)
+	}()
+
+	log.Fatal(<-errChan)
 }
