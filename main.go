@@ -7,23 +7,34 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 func main() {
-	fs := http.FileServer(http.Dir("assets/"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	mux := &http.ServeMux{} // http.NewServeMux()
 
-	http.HandleFunc("/", indexHandler)
-	http.HandleFunc("/err", errHandler)
-	http.HandleFunc("/login", loginHandler)
-	http.HandleFunc("/logout", logoutHandler)
-	http.HandleFunc("/signup", signupHandler)
-	http.HandleFunc("/signup_account", signupAccountHandler)
-	http.HandleFunc("/authenticate", authenticateHandler)
-	http.HandleFunc("/thread/new", newThreadHandler)
-	http.HandleFunc("/thread/create", createThreadHandler)
-	http.HandleFunc("/thread/post", postThreadHandler)
-	http.HandleFunc("/thread/read", readThreadHandler)
+	fs := http.FileServer(http.Dir("assets/"))
+	mux.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	mux.HandleFunc("/", indexHandler)
+	mux.HandleFunc("/err", errHandler)
+	mux.HandleFunc("/login", loginHandler)
+	mux.HandleFunc("/logout", logoutHandler)
+	mux.HandleFunc("/signup", signupHandler)
+	mux.HandleFunc("/signup_account", signupAccountHandler)
+	mux.HandleFunc("/authenticate", authenticateHandler)
+	mux.HandleFunc("/thread/new", newThreadHandler)
+	mux.HandleFunc("/thread/create", createThreadHandler)
+	mux.HandleFunc("/thread/post", postThreadHandler)
+	mux.HandleFunc("/thread/read", readThreadHandler)
+
+	srv := &http.Server{
+		Addr:         ":8080",
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 5 * time.Second,
+		IdleTimeout:  120 * time.Second,
+		Handler:      mux,
+	}
 
 	errChan := make(chan error)
 
@@ -34,7 +45,7 @@ func main() {
 	}()
 
 	go func() {
-		errChan <- http.ListenAndServe(":8080", nil)
+		errChan <- srv.ListenAndServe()
 	}()
 
 	log.Fatal(<-errChan)
